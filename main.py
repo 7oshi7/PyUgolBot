@@ -76,24 +76,24 @@ def multiple_replace(dict, text):
 
 def translate(msg):
     prefix, text = msg.split(':', 1)
-    result = multiple_replace(dict, text)
-    return '%s: %s' % (prefix, result)
+    translated_text = multiple_replace(dict, text)
+    return prefix + ': ' + translated_text
 
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
-    sti = open('sticker.webp', 'rb')
-    bot.send_sticker(message.chat.id, sti)
+    welcome_sticker = open('sticker.webp', 'rb')
+    bot.send_sticker(message.chat.id, welcome_sticker)
 
 
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
     try:
         msg = message.text
-        r = translate(msg)
-        bot.send_message(message.chat.id, r)
+        result = translate(msg)
+        bot.send_message(message.chat.id, result)
     except Exception:
         bot.send_message(message.chat.id, 'Ошибка')
 
 
-bot.polling(none_stop=True)
+bot.polling(none_stop=True, interval=0.2)
